@@ -36,10 +36,9 @@ private:
     QWidget* foWidget;
 
     QToolButton* fButton;
-
-    QPushButton* sButton;
-    QPushButton* tButton;
-    QPushButton* foButton;
+    QToolButton* sButton;
+    QToolButton* tButton;
+    QToolButton* foButton;
 
     QVBoxLayout* mainLayout;
     QVBoxLayout* idLayout;
@@ -50,7 +49,8 @@ private:
     QVBoxLayout* fBLayout;
     QGridLayout* coursesLayout;
 
-    QFont *caracterStyle;
+    QFont *characterStyle;
+    QString toolButtonStyle;
     int width;
     int height;
     QScreen* screen;

@@ -126,10 +126,9 @@ void PmuMainPage::constructMainWidget(){
     //!create tab widget-------------------------------------------------------------------------------
     choosenTableWidget = new QTabWidget();
 
-    choosenTableWidget->setStyleSheet("QTabWidget::pane{border:none;} "
+    choosenTableWidget->setStyleSheet("QTabWidget::pane{border:none;border: none} "
                                       "QTabBar::tab{ background:rgb(135,209,199);color:black; width:"+QString::number(width*0.25)+";height:"+QString::number(height *0.05)+"}"
-                                      "QTabBar::tab:hover{background:rgb(150, 199, 230);}"
-                                      "QTabBar::tab:selected{border-color: white; background:white; color:blue;}");
+                                      "QTabBar::tab:selected{ border: none;background:white; color:blue;}");
 
     hottipsWidget = new HottipsWidget(this->width,this->height);
     hottipsWidget->setFocusPolicy(Qt::NoFocus);

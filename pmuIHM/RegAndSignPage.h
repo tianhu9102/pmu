@@ -19,13 +19,14 @@
 #include <QMenu>
 #include <QMenuBar>
 #include <QFont>
+#include "ConnectToServer.h"
 
 class RegAndSignPage : public QWidget
 {
     Q_OBJECT
 
 public:
-    RegAndSignPage(int width, int height, bool flag);
+    RegAndSignPage(int width, int height, bool flag, ConnectToServer* connectToServer);
     ~RegAndSignPage();
 
     void initVariable();
@@ -36,6 +37,8 @@ public:
     void setState(bool flag);
 
 private:
+    ConnectToServer* connectToServer;
+
     int width;
     int height;
     bool flag;
@@ -82,6 +85,9 @@ private:
 
 public slots:
     void showSignUpInformation();
+
+    void sign();
+    void reponse(QNetworkReply*reply);
 
 };
 

@@ -4,7 +4,6 @@
         <file>images/triangle.png</file>
         <file>images/down.png</file>
         <file>images/searchButton1.png</file>
-        <file>images/lala.png</file>
         <file>images/back.png</file>
         <file>images/labelBackground.png</file>
         <file>images/background.png</file>
@@ -22,5 +21,9 @@
         <file>images/bestman.png</file>
         <file>images/games.png</file>
         <file>images/life.png</file>
+        <file>images/history.png</file>
+        <file>images/publishCourse.png</file>
+        <file>images/rss.png</file>
+        <file>images/schedule.png</file>
     </qresource>
 </RCC>
