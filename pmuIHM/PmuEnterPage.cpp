@@ -22,8 +22,8 @@ void PmuEnterPage::initVariable(){
     this->screen = QApplication::screens().at(0);
     this->height = screen->availableSize().height();
     this->width = screen->availableSize().width();
-    this->caracterStyle = new QFont("Segoe UI", 15, QFont::AnyStyle, false);
-    this->regAndSignPage = new RegAndSignPage(width, height, flag);
+    this->caracterStyle = new QFont("Segoe UI", 17, QFont::AnyStyle, false);
+    this->regAndSignPage = new RegAndSignPage(width, height, flag, this->connectToServer);
     this->pmuHomeTabPage = new PmuHomeTabPage(width, height, caracterStyle);
     //this->regAndSignPage = new RegAndSignPage(width, height, flag);
     this->coursePublishPage = new CoursePublishPage(width, height, caracterStyle);
@@ -50,20 +50,26 @@ void PmuEnterPage::constructIHM(){
     //--------------------------------------------------------------------------------------
     this->titleBarItem = new QSpacerItem(20, 20, QSizePolicy::Expanding, QSizePolicy::Expanding);
     this->coursePublishButton = new QPushButton("發布課程");
+    this->coursePublishButton->setDefault (false);
     this->coursePublishButton->setFont(*caracterStyle);
-    this->coursePublishButton->setStyleSheet("background-color:transparent; color:AliceBlue; border: 1px solid white; border-radius:16px");
+    this->coursePublishButton->setStyleSheet("QPushButton{background-color:transparent; color:AliceBlue; border: 0px;}"
+                                             "QPushButton:focus{padding: -2;}");
 
     this->helpButton = new QPushButton("幫助");
     this->helpButton->setFont(*caracterStyle);
-    this->helpButton->setStyleSheet("background-color:transparent; color:AliceBlue; border: 0px solid Gray;border-radius: 0px;padding: 08px;");
+    this->helpButton->setFlat(true);
+    this->helpButton->setStyleSheet("QPushButton{background-color:transparent; color:AliceBlue; border: 0px solid Gray;border-radius: 0px;}"
+                                    "QPushButton:focus{padding: -2;}");
 
     this->signInButton = new QPushButton("登錄");
     this->signInButton->setFont(*caracterStyle);
-    this->signInButton->setStyleSheet("background-color:transparent; color:AliceBlue; border: 0px solid Gray;border-radius: 0px;padding: 08px;");
+    this->signInButton->setStyleSheet("QPushButton{background-color:transparent; color:AliceBlue; border: 0px solid Gray;border-radius: 0px;}"
+                                      "QPushButton:focus{padding: -2;}");
 
     this->signUpButton = new QPushButton("註冊");
     this->signUpButton->setFont(*caracterStyle);
-    this->signUpButton->setStyleSheet("background-color:transparent; color:AliceBlue; border: 0px solid Gray;border-radius: 0px;padding: 08px;");
+    this->signUpButton->setStyleSheet("QPushButton{background-color:transparent; color:AliceBlue; border: 0px solid Gray;border-radius: 0px;padding-right: 20px;}"
+                                      "QPushButton:focus{padding: -2;}");
 
     this->titleBar = new QWidget();
     this->titleBar->setStyleSheet("background-color:transparent");
@@ -74,7 +80,7 @@ void PmuEnterPage::constructIHM(){
     this->titleBarLayout->addWidget(helpButton);
     this->titleBarLayout->addWidget(signInButton);
     this->titleBarLayout->addWidget(signUpButton);
-    this->titleBarLayout->setSpacing(0);
+    this->titleBarLayout->setSpacing(20);
     this->titleBarLayout->setMargin(0);
 
     //--------------------------------------------------------------------------------------
@@ -237,6 +243,7 @@ void PmuEnterPage::creatDialogWidget(){
     this->returnLayout->setAlignment(Qt::AlignRight);
 
     this->individualOrOrgDialog = new QDialog();
+    this->individualOrOrgDialog->setAttribute(Qt::WA_ShowModal, true);
     this->individualOrOrgDialog->setStyleSheet("background-color:#F7F083");
     this->individualOrOrgDialog->setFixedSize(width*0.75,height*0.3);
     this->dialogLayout = new QVBoxLayout(individualOrOrgDialog);

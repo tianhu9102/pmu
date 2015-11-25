@@ -1,11 +1,15 @@
 #include "RegAndSignPage.h"
 
-RegAndSignPage::RegAndSignPage(int width, int height, bool flag)
-    : QWidget()
-{
+RegAndSignPage::RegAndSignPage(int width, int height, bool flag, ConnectToServer* connectToServer)
+    : QWidget(){
+
+
+
     this->width = width;
     this->height = height;
     this->flag = flag;
+    this->connectToServer = connectToServer;
+
 
     this->initVariable();
     this->constructIHM();
@@ -79,30 +83,30 @@ void RegAndSignPage::constructIHM(){
     switchStatusWindowLayout->addWidget(switchStatusWindowRest);
     switchStatusWindowLayout->addWidget(registrationButton);
 
-    emailAddressLineEdit = new QLineEdit();
+    emailAddressLineEdit = new QLineEdit("cheng.wang@siat.ac.cn");
     emailAddressLineEdit->setFixedHeight(0.071*height);
 
-    emailAddressLineEdit->setPlaceholderText("電子郵件地址");
+    //emailAddressLineEdit->setPlaceholderText("電子郵件地址");
     emailAddressLineEdit->setStyleSheet("border: 1px solid gray; background-color:aliceBlue; color:gray");
 
-    passwordLineEdit = new QLineEdit();
+    passwordLineEdit = new QLineEdit("12345678");
     passwordLineEdit->setFixedHeight(0.071*height);
-    passwordLineEdit->setPlaceholderText("密碼");
+    //passwordLineEdit->setPlaceholderText("密碼");
     passwordLineEdit->setStyleSheet("border: 1px solid gray; background-color:aliceBlue; color:gray");
 
-    confirmPasswordLineEdit = new QLineEdit();
+    confirmPasswordLineEdit = new QLineEdit("12345678");
     confirmPasswordLineEdit->setFixedHeight(0.071*height);
-    confirmPasswordLineEdit->setPlaceholderText("確認密碼");
+    //confirmPasswordLineEdit->setPlaceholderText("確認密碼");
     confirmPasswordLineEdit->setStyleSheet("border: 1px solid gray; background-color:aliceBlue; color:gray");
 
-    phoneNumberLineEdit = new QLineEdit();
+    phoneNumberLineEdit = new QLineEdit("18667654332");
     phoneNumberLineEdit->setFixedHeight(0.071*height);
-    phoneNumberLineEdit->setPlaceholderText("電話號碼");
+    //phoneNumberLineEdit->setPlaceholderText("電話號碼");
     phoneNumberLineEdit->setStyleSheet("border: 1px solid gray; background-color:aliceBlue; color:gray");
 
-    addressLineEdit = new QLineEdit();
+    addressLineEdit = new QLineEdit("3 rue moret");
     addressLineEdit->setFixedHeight(0.071*height);
-    addressLineEdit->setPlaceholderText("地址");
+    //addressLineEdit->setPlaceholderText("地址");
     addressLineEdit->setStyleSheet("border: 1px solid gray; background-color:aliceBlue; color:gray");
     loginWindow = new QWidget();
     //loginWindow->setFixedHeight(0.213*height);
@@ -154,6 +158,41 @@ void RegAndSignPage::constructIHM(){
 void RegAndSignPage::setConnections(){
     this->connect(registrationButton, SIGNAL(clicked()), this, SLOT(showSignUpInformation()));
     this->connect(returnButton, SIGNAL(clicked()), this, SLOT(close()));
+    this->connect(loginButton, SIGNAL(clicked()), this, SLOT(sign()));
+}
+
+void RegAndSignPage::sign(){
+
+    if(!flag){
+        qDebug()<<"-------";
+        QNetworkAccessManager *network_manager = new QNetworkAccessManager();
+        QNetworkRequest network_request;
+        QByteArray post_data;
+
+        post_data.append("registerForm.email=" + emailAddressLineEdit->text()+ "&");
+        post_data.append("registerForm.password="+passwordLineEdit->text()+"&");
+        post_data.append("registerForm.conformPassword="+confirmPasswordLineEdit->text()+"&");
+        post_data.append("registerForm.telephone="+phoneNumberLineEdit->text()+"&");
+        post_data.append("registerForm.address="+addressLineEdit->text());
+
+
+        network_request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
+        network_request.setHeader(QNetworkRequest::ContentLengthHeader, post_data.length());
+        network_request.setUrl(QUrl("http://172.20.35.211:8090/daishangwo/register.action"));
+
+        connect(network_manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(reponse(QNetworkReply*)));
+
+        network_manager->post(network_request, post_data);
+    }
+    else{
+        qDebug()<<"++++++++-";
+        emailAddressLineEdit->text();
+        passwordLineEdit->text();
+    }
+}
+
+void RegAndSignPage::reponse(QNetworkReply*reply){
+    qDebug()<<"repondu";//<<reply->readAll();
 }
 
 //!-----------------------------------------------------------------------------------------

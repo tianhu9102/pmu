@@ -1,7 +1,6 @@
 #include "ConnectToServer.h"
 
-ConnectToServer::ConnectToServer()
-{
+ConnectToServer::ConnectToServer(){
 
 }
 
