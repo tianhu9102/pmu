@@ -22,7 +22,6 @@ public:
     void initial();
     void constructIHM();
     void setConnections();
-
 private:
     QLabel* idAvatarLabel;
     QLabel* idAccountLabel;

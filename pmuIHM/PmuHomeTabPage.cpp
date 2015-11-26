@@ -8,7 +8,7 @@ PmuHomeTabPage::PmuHomeTabPage(int width, int height, QFont *caracterStyle) : QT
 
     this->initVariable();
     this->constructIHM();
-    //this->setConnections();
+    this->setConnections();
     this->drawBackground();
 }
 
@@ -38,6 +38,14 @@ void PmuHomeTabPage::constructIHM(){
     this->insertTab(3,this->myOwnPage,"我的");
     this->setTabPosition(South);
     this->setFont(QFont("Segoe UI",15,QFont::Normal,false));
+}
+
+//!-----------------------------------------------------------------------------------------
+//!
+//! \brief PmuHomeTabPage::setConnections
+//!
+void PmuHomeTabPage::setConnections(){
+
 }
 
 //!-----------------------------------------------------------------------------------------

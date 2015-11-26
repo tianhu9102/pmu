@@ -25,9 +25,7 @@ HottipsWidget::HottipsWidget(int width, int height){
     listWidget->setDragEnabled(false);
     listWidget->setIconSize(QSize(this->width*0.3,this->height*0.52*0.26));
     listWidget->setSpacing(height*0.001);
-    sportItem = new QListWidgetItem(QIcon(QPixmap(":/images/boduo.png").scaled(QSize(this->width*0.3,this->height*0.52*0.26))),"运动",listWidget);
-    //sportItem->setSizeHint(Qsize);
-
+    sportItem = new QListWidgetItem(QIcon(QPixmap(":/images/sport.png").scaled(QSize(this->width*0.2,this->height*0.52*0.24))),"运动",listWidget);
     danceItem = new QListWidgetItem(QIcon(QPixmap(":/images/boduo.png").scaled(QSize(this->width*0.3,this->height*0.52*0.26))),"舞蹈",listWidget);
     musicItem = new QListWidgetItem(QIcon(QPixmap(":/images/boduo.png").scaled(QSize(this->width*0.3,this->height*0.52*0.26))),"音乐",listWidget);
     languageItem = new QListWidgetItem(QIcon(QPixmap(":/images/boduo.png").scaled(QSize(this->width*0.3,this->height*0.52*0.26))),"语言",listWidget);
