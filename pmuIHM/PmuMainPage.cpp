@@ -95,10 +95,9 @@ void PmuMainPage::constructMainWidget(){
     //optionListWidget->setMovement(QListView::Static);
     //optionListWidget->setResizeMode(QListView::Fixed);
     optionListWidget->setViewMode(QListView::IconMode);
-    optionListWidget->setSpacing(width*0.101);
+    optionListWidget->setSpacing(width*0.09);
     optionListWidget->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     optionListWidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-
 
     model = new QStandardItemModel();
 
@@ -141,7 +140,7 @@ void PmuMainPage::constructMainWidget(){
 
     choosenTableWidget->setStyleSheet("QTabWidget::pane{border:none;border: none} "
                                       "QTabBar::tab{ background:rgb(135,209,199);color:black; width:"+QString::number(width*0.25)+";height:"+QString::number(height *0.05)+"}"
-                                      "QTabBar::tab:selected{ border: none;background:white; color:blue;}");
+                                      "QTabBar::tab:selected{ border: none;background:white; color:rgb(135,209,199);}");
 
     hottipsWidget = new HottipsWidget(this->width,this->height);
     hottipsWidget->setFocusPolicy(Qt::NoFocus);

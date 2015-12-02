@@ -28,7 +28,8 @@ SOURCES += main.cpp\
     ConnectToServer.cpp \
     pmuIHM/TemplateWidget.cpp \
     AndroidGestureEvent.cpp \
-    pmuIHM/ClassificationWidget.cpp
+    pmuIHM/ClassificationWidget.cpp \
+    pmuIHM/MyRssCourse.cpp
 
 HEADERS  += \
     pmuIHM/GuessULikeWidget.h \
@@ -45,7 +46,8 @@ HEADERS  += \
     ConnectToServer.h \
     pmuIHM/TemplateWidget.h \
     AndroidGestureEvent.h \
-    pmuIHM/ClassificationWidget.h
+    pmuIHM/ClassificationWidget.h \
+    pmuIHM/MyRssCourse.h
 
 RESOURCES += \
     imageresources.qrc

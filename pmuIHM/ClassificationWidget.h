@@ -27,6 +27,7 @@
 #include <QEvent>
 #include <QGestureEvent>
 
+
 class ClassificationWidget : public QWidget
 {
     Q_OBJECT
@@ -39,10 +40,13 @@ public:
     void drawBackground();
     void constructIHM();
     void setConnections();
-    void adjustScrollBar(QScrollBar *scrollBar);
-
+    void grabGestures(const QList<Qt::GestureType> &gestures);
     bool gestureEvent(QGestureEvent *event);
     void swipeTriggered(QSwipeGesture* gesture);
+    void panTriggered(QPanGesture *gesture);
+    void pinchTriggered(QPinchGesture *gesture);
+    void tapTriggered(QTapGesture *gesture);
+    void tapAndHoldTriggered(QTapAndHoldGesture *gesture);
 
     void display(QString textOption);
 
@@ -50,12 +54,9 @@ protected:
     virtual bool event(QEvent *event);
 private:
     QPixmap* pixmap;
-
     QScreen* screen;
-
     QFrame *titleBar;
 
-    //---------------
     QVBoxLayout* mainLayout;
     TemplateWidget* firstWidget;
     TemplateWidget* secondWidget;
@@ -63,85 +64,15 @@ private:
     TemplateWidget* fourthWidget;
     TemplateWidget* fifthWidget;
     TemplateWidget* sixthWidget;
-    //---------------
 
-    //QScrollArea *contentWidget;
     QWidget *contentWidget;
     QWidget *adsWidget;
-    QWidget *contentInfoChWidget;
-    QWidget *contentInfoEnWidget;
-    QWidget *contentInfoFrWidget;
-    QWidget *contentInfoGeWidget;
-    QWidget *contentInfoJaWidget;
-    QWidget *contentInfoKoWidget;
-
-    QWidget *contentChineseWidget;
-    QWidget *contentEnglishWidget;
-    QWidget *contentFrenchWidget;
-    QWidget *contentDeutschWidget;
-    QWidget *contentJapaneseWidget;
-    QWidget *contentKoreanWidget;
-
-//    QListWidget *contentListWindow;
 
     QVBoxLayout* mainWidgetLayout;
     QHBoxLayout* titleBarLayout;
-    QVBoxLayout* contentWidgetLayout;
-    QHBoxLayout* chineseWidgetLayout;
-    QHBoxLayout* englishWidgetLayout;
-    QHBoxLayout* frenchWidgetLayout;
-    QHBoxLayout* deutschWidgetLayout;
-    QHBoxLayout* japaneseWidgetLayout;
-    QHBoxLayout* koreanWidgetLayout;
-
-    QGridLayout* chineseGridLayout;
-    QGridLayout* englishGridLayout;
-    QGridLayout* frenchGridLayout;
-    QGridLayout* deutschGridLayout;
-    QGridLayout* japaneseGridLayout;
-    QGridLayout* koreanGridLayout;
-//    QGridLayout* testGridLayout;
-
-//    QSpacerItem* tileBarSpacer;
 
     QPushButton* titleBarReturnButton;
     QPushButton* titleBarSearchButton;
-    QPushButton* chineseGridButtonone;
-    QPushButton* chineseGridButtontwo;
-    QPushButton* chineseGridButtonthree;
-    QPushButton* chineseGridButtonfour;
-    QPushButton* chineseGridButtonfive;
-    QPushButton* chineseGridButtonsix;
-    QPushButton* englishGridButtonone;
-    QPushButton* englishGridButtontwo;
-    QPushButton* englishGridButtonthree;
-    QPushButton* englishGridButtonfour;
-    QPushButton* englishGridButtonfive;
-    QPushButton* englishGridButtonsix;
-    QPushButton* frenchGridButtonone;
-    QPushButton* frenchGridButtontwo;
-    QPushButton* frenchGridButtonthree;
-    QPushButton* frenchGridButtonfour;
-    QPushButton* frenchGridButtonfive;
-    QPushButton* frenchGridButtonsix;
-    QPushButton* deutschGridButtonone;
-    QPushButton* deutschGridButtontwo;
-    QPushButton* deutschGridButtonthree;
-    QPushButton* deutschGridButtonfour;
-    QPushButton* deutschGridButtonfive;
-    QPushButton* deutschGridButtonsix;
-    QPushButton* japaneseGridButtonone;
-    QPushButton* japaneseGridButtontwo;
-    QPushButton* japaneseGridButtonthree;
-    QPushButton* japaneseGridButtonfour;
-    QPushButton* japaneseGridButtonfive;
-    QPushButton* japaneseGridButtonsix;
-    QPushButton* koreanGridButtonone;
-    QPushButton* koreanGridButtontwo;
-    QPushButton* koreanGridButtonthree;
-    QPushButton* koreanGridButtonfour;
-    QPushButton* koreanGridButtonfive;
-    QPushButton* koreanGridButtonsix;
 
     QFont *caracterStyle;
 
@@ -156,6 +87,13 @@ private:
     QScrollArea* contentWidgetScrollArea;
 
     SearchWidget *searchPage;
+
+    qreal horizontalOffset;
+    qreal verticalOffset;
+    qreal rotationAngle;
+    qreal scaleFactor;
+    qreal currentStepScaleFactor;
+
     int height;
     int width;
     int buttonWidth;

@@ -143,9 +143,9 @@ void PmuEnterPage::constructIHM(){
     this->centerPlantform->setFixedSize(width*0.74, height*0.53);
     this->centerPlantformLayout = new QVBoxLayout(centerPlantform);
     this->centerPlantformLayout->addWidget(this->welcomLabel);
-    this->centerPlantformLayout->addStretch();
+//    this->centerPlantformLayout->addStretch();
     this->centerPlantformLayout->addWidget(this->searchingBar);
-    this->centerPlantformLayout->addStretch();
+//    this->centerPlantformLayout->addStretch();
     this->centerPlantformLayout->addWidget(this->enterHomePageWidget);
     this->centerPlantformLayout->setSpacing(0);
     this->centerPlantformLayout->setMargin(0);
@@ -219,7 +219,8 @@ void PmuEnterPage::creatDialogWidget(){
     this->individualButton = new QPushButton("個  人");
     this->individualButton->setFixedSize(width*0.75*0.5,height*0.35*0.4);
     this->individualButton->setFont(QFont("Segoe UI", 25, QFont::AnyStyle, false));
-    this->individualButton->setStyleSheet("background-color:transparent; color:skyBlue; border: 0px solid Gray;border-radius: 0px;padding: 08px;");
+    this->individualButton->setStyleSheet("QPushButton{background-color:transparent; color:skyBlue; border: 0px solid Gray;border-radius: 0px;padding: 08px;}"
+                                          "QPushButton:focus{padding:-2}");
 
 //    this->orLabel = new QLabel("OR");
 //    this->orLabel->setFont(QFont("Segoe UI", 25, QFont::AnyStyle, false));
@@ -227,7 +228,8 @@ void PmuEnterPage::creatDialogWidget(){
     this->organizationButton = new QPushButton("機  構");
     this->organizationButton->setFixedSize(width*0.75*0.5,height*0.35*0.4);
     this->organizationButton->setFont(QFont("Segoe UI", 25, QFont::AnyStyle, false));
-    this->organizationButton->setStyleSheet("background-color:transparent; color:skyBlue; border: 0px solid Gray;border-radius: 0px;padding: 08px;");
+    this->organizationButton->setStyleSheet("QPushButton{background-color:transparent; color:skyBlue; border: 0px solid Gray;border-radius: 0px;padding: 08px;}"
+                                            "QPushButton:focus{padding:-2}");
 
     this->optionWidget = new QWidget();
     this->optionWidget->setFixedHeight(height*0.35*0.4);

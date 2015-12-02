@@ -33,6 +33,8 @@ void PmuHomeTabPage::initVariable(){
 //!
 void PmuHomeTabPage::constructIHM(){
     this->insertTab(0,this->pmumainPage,"首頁");
+    this->setTabIcon(0,QIcon(":/images/homePage.png"));
+    this->setIconSize(QSize(width*0.25,height*0.06));
     this->insertTab(1,this->neighborPage,"附近");
     this->insertTab(2,this->selectionPage,"精選");
     this->insertTab(3,this->myOwnPage,"我的");

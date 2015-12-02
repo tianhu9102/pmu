@@ -19,16 +19,18 @@ HottipsWidget::HottipsWidget(int width, int height){
                               );
     listWidget->setSelectionMode(QAbstractItemView::SingleSelection);
     listWidget->setViewMode(QListWidget::ListMode);
+    listWidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
     listWidget->setAcceptDrops(true);
-    listWidget->setFont(QFont("Segoe UI", 25, QFont::AnyStyle, true));
+    listWidget->setFont(QFont("Segoe UI", 15, QFont::AnyStyle, true));
+    listWidget->setWordWrap(true);
     listWidget->setDragEnabled(false);
     listWidget->setIconSize(QSize(this->width*0.3,this->height*0.52*0.26));
     listWidget->setSpacing(height*0.001);
-    sportItem = new QListWidgetItem(QIcon(QPixmap(":/images/sport.png").scaled(QSize(this->width*0.2,this->height*0.52*0.24))),"运动",listWidget);
-    danceItem = new QListWidgetItem(QIcon(QPixmap(":/images/boduo.png").scaled(QSize(this->width*0.3,this->height*0.52*0.26))),"舞蹈",listWidget);
-    musicItem = new QListWidgetItem(QIcon(QPixmap(":/images/boduo.png").scaled(QSize(this->width*0.3,this->height*0.52*0.26))),"音乐",listWidget);
-    languageItem = new QListWidgetItem(QIcon(QPixmap(":/images/boduo.png").scaled(QSize(this->width*0.3,this->height*0.52*0.26))),"语言",listWidget);
+    sportItem = new QListWidgetItem(QIcon(QPixmap(":/images/yu.png").scaled(QSize(this->width*0.3,this->height*0.52*0.24))),"  杜月，2009年碩士畢業，從事教育行業5年，主講數學",listWidget);
+    danceItem = new QListWidgetItem(QIcon(QPixmap(":/images/yu.png").scaled(QSize(this->width*0.3,this->height*0.52*0.26))),"  王一山，2009年碩士畢業，從事教育行業5年，主講數學",listWidget);
+    musicItem = new QListWidgetItem(QIcon(QPixmap(":/images/yu.png").scaled(QSize(this->width*0.3,this->height*0.52*0.26))),"  李西纳，2009年碩士畢業，從事教育行業5年，主講數學",listWidget);
+    languageItem = new QListWidgetItem(QIcon(QPixmap(":/images/yu.png").scaled(QSize(this->width*0.3,this->height*0.52*0.26))),"  邓平，2009年碩士畢業，從事教育行業5年，主講數學",listWidget);
     listWidget->insertItem(1,sportItem);
     listWidget->insertItem(2,danceItem);
     listWidget->insertItem(3,musicItem);

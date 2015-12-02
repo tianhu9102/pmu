@@ -7,7 +7,7 @@ MyOwnPage::MyOwnPage(int width, int height)
     this->height = height;
     this->initial();
     this->constructIHM();
-    //this->setConnections();
+    this->setConnections();
 }
 
 MyOwnPage::~MyOwnPage()
@@ -18,6 +18,7 @@ MyOwnPage::~MyOwnPage()
 void MyOwnPage::initial(){
     characterStyle = new QFont("Segoe UI" , 18, QFont::Normal, false);
     toolButtonStyle = "QToolButton{padding-top:" + QString::number(height*0.02) + ";padding-bottom:" + QString::number(height*0.02) + ";border:none;color:rgb(135,209,199);background-color:transparent;}";
+    this->myRssCourse = new MyRssCourse(width, height);
 }
 
 //!-----------------------------------------------------------------------------------------
@@ -133,13 +134,7 @@ void MyOwnPage::constructIHM(){
 //! \brief MyOwnPage::setConnections
 //!
 void MyOwnPage::setConnections(){
-    connect(fButton,SIGNAL(pressed()),this,SLOT(lks()));
+    connect(this->sButton, SIGNAL(clicked()), this->myRssCourse, SLOT(show()));
 }
 
 //!-----------------------------------------------------------------------------------------
-//!
-//! \brief MyOwnPage::lks
-//!
-void MyOwnPage::lks(){
-    this->close();
-}
