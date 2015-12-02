@@ -25,5 +25,7 @@
         <file>images/publishCourse.png</file>
         <file>images/rss.png</file>
         <file>images/schedule.png</file>
+        <file>images/yu.png</file>
+        <file>images/homePage.png</file>
     </qresource>
 </RCC>

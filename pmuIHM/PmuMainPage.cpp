@@ -22,7 +22,7 @@ PmuMainPage::~PmuMainPage()
 //! \brief PmuMainPage::initial
 //!
 void PmuMainPage::initial(){
-    classificationWidget = new ClassificationWidget();
+    this->classificationWidget = new ClassificationWidget();
 
 }
 
@@ -33,43 +33,56 @@ void PmuMainPage::initial(){
 void PmuMainPage::constructMainWidget(){
 
     //! create seraching bar area
+//    this->returnBackButton = new QPushButton();
+//    this->returnBackButton->setFixedSize(width*0.11, height*0.05);
+//    this->returnBackButton->setIcon(QIcon(":/images/return.png"));
+//    this->returnBackButton->setIconSize(QSize(width*0.12, height*0.05));
+//    this->returnBackButton->setStyleSheet("QPushButton{border: 0px;background-color:transparent; color: AliceBlue;}"
+//                                          "QPushButton:focus{padding: -2;}");
+
     cityLabel = new QLabel("城市 :");
     cityLabel->setFixedHeight(height*0.05);
     //cityLabel->setAlignment(Qt::AlignCenter);
     cityLabel->setFont(QFont("Segoe UI",17,QFont::Normal,false));
-    cityLabel->setStyleSheet("QLabel{background-color:transparent;color:aliceblue; border:0px solid Gray;}");
+    cityLabel->setStyleSheet("QLabel{background-color:transparent;color:aliceblue; border:0px solid Gray;padding-left: 20px;}");
     citySwitchComoBox = new QComboBox();
+    citySwitchComoBox->setFixedSize(width*0.16,height*0.05);
+    citySwitchComoBox->setFont(QFont("Segoe UI",16,QFont::Normal,false));
+    citySwitchComoBox->addItem("珠海");
+    citySwitchComoBox->addItem("澳門");
     citySwitchComoBox->setStyleSheet("QComboBox{color:gray;background-color:transparent;border:0px solid black;border-radius:5px;padding:1px;}"
                                       //"QComboBox QListView{ border-style: none; background-color: qlineargradient(x1:0, y1:0, x2:1,y2:0, stop: 1 rgba(228, 41, 81, 100), stop: 0 rgba(234, 107, 101, 100));}"
                                       "QComboBox::drop-down{width: 50px;border: 0px;border-color:transparent;border-left-style:solid;border-top-style: none;border-bottom-style: none;border-right-style: none;}"
                                       "QComboBox::down-arrow{image: url(:/images/down.png);width: 60px; height: 60px;}");
-    citySwitchComoBox->setFixedSize(width*0.145,height*0.05);
-    citySwitchComoBox->setFont(QFont("Segoe UI",16,QFont::Normal,false));
-    citySwitchComoBox->addItem("珠海");
-    citySwitchComoBox->addItem("澳門");
 
     searchingLineEdit = new QLineEdit();
-    searchingLineEdit->setFixedSize(width*0.36,height*0.05);
-    searchingLineEdit->setStyleSheet("QLineEdit { color:AliceBlue; border: 0px solid Gray; border-radius: 0px; color:rgb(0, 0, 0); background-color: azure; } "
-                                               "QLineEdit:focus{border-style:outset; border-width:0px; border-radius: 0px; border-color: rgb(41, 237, 215); color:rgb(0, 0, 0); background-color: azure; } ");
-    //searchingLineEdit->setStyleSheet("QLineEdit {background-color:transparent; color:AliceBlue; border: 5px solid blue;border-radius: 10px;padding: 5px; selection-background-color:Blue;");
-    searchingButton = new QPushButton("搜索");
-    searchingButton->setFixedHeight(height*0.05);
+    searchingLineEdit->setFixedSize(width*0.38,height*0.05);
     searchingLineEdit->setPlaceholderText("輸入學科");
-    searchingButton->setStyleSheet("QPushButton{background-color:transparent;color:aliceblue;border:0px;}");
+    searchingLineEdit->setStyleSheet("QLineEdit{color:AliceBlue; border: 0px solid Gray; border-radius: 0px; color:rgb(0, 0, 0); background-color: azure;} "
+                                     "QLineEdit:focus{border-style:outset; border-width:0px; border-radius: 0px; border-color: rgb(41, 237, 215); color:rgb(0, 0, 0); background-color: azure; } ");
+    searchingButton = new QPushButton();
+    searchingButton->setFixedSize(width*0.092,height*0.05);
+    searchingButton->setIconSize(QSize(width*0.092,height*0.05));
+    searchingButton->setStyleSheet("QPushButton{border-image: url(:/images/searchButton.png); background-color:AliceBlue;border: 0px;}"
+                                   "QPushButton:pressed{border-image: url(:/images/searchButton1.png);background-color:AliceBlue;border: 0px;}"
+                                   "QPushButton:focus{padding: -2;}");
     somethingElseButton1 = new QPushButton("購物車");
     somethingElseButton1->setFixedHeight(height*0.05);
-    somethingElseButton1->setStyleSheet("QPushButton{background-color:transparent;color:aliceblue;border:0px solid Gray; }");
+    somethingElseButton1->setStyleSheet("QPushButton{background-color:transparent;color:aliceblue;border:0px solid Gray; padding-left: 20px; padding-right: 20px; }"
+                                        "QPushButton:focus{padding: -2;}");
     titleBar = new QFrame();
     titleBar->setFixedHeight(height*0.08);
     titleBar->setStyleSheet("background-color:transparent");
     searchingBarLayout = new QHBoxLayout(titleBar);
+    //searchingBarLayout->addWidget(returnBackButton);
     searchingBarLayout->addWidget(cityLabel);
     searchingBarLayout->addWidget(citySwitchComoBox);
+    searchingBarLayout->addStretch();
     searchingBarLayout->addWidget(searchingLineEdit);
     searchingBarLayout->addWidget(searchingButton);
     searchingBarLayout->addWidget(somethingElseButton1);
-    searchingBarLayout->setSpacing(3);
+
+    searchingBarLayout->setSpacing(0);
     searchingBarLayout->setMargin(0);
 
     //!create list widget
@@ -82,10 +95,9 @@ void PmuMainPage::constructMainWidget(){
     //optionListWidget->setMovement(QListView::Static);
     //optionListWidget->setResizeMode(QListView::Fixed);
     optionListWidget->setViewMode(QListView::IconMode);
-    optionListWidget->setSpacing(width*0.101);
+    optionListWidget->setSpacing(width*0.09);
     optionListWidget->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     optionListWidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-
 
     model = new QStandardItemModel();
 
@@ -128,7 +140,7 @@ void PmuMainPage::constructMainWidget(){
 
     choosenTableWidget->setStyleSheet("QTabWidget::pane{border:none;border: none} "
                                       "QTabBar::tab{ background:rgb(135,209,199);color:black; width:"+QString::number(width*0.25)+";height:"+QString::number(height *0.05)+"}"
-                                      "QTabBar::tab:selected{ border: none;background:white; color:blue;}");
+                                      "QTabBar::tab:selected{ border: none;background:white; color:rgb(135,209,199);}");
 
     hottipsWidget = new HottipsWidget(this->width,this->height);
     hottipsWidget->setFocusPolicy(Qt::NoFocus);

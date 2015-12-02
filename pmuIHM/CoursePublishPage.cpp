@@ -30,7 +30,8 @@ void CoursePublishPage::constructIHM(){
     this->returnButton->setFixedWidth(120);
     this->returnButton->setIcon(QIcon(":/images/back.png"));
     this->returnButton->setIconSize(QSize(120,100));
-    this->returnButton->setStyleSheet("background-color:transparent; color:AliceBlue; border: 0px solid Gray;border-radius: 0px;padding: 08px;");
+    this->returnButton->setStyleSheet("QPushButton{background-color:transparent; color:AliceBlue; border: 0px solid Gray;border-radius: 0px;padding: 08px;}"
+                                      "QPushButton:focus{padding:-2}");
 
     this->titleLabel = new QLabel("發布課程");
     this->titleLabel->setFixedHeight(100);
@@ -39,7 +40,7 @@ void CoursePublishPage::constructIHM(){
 
     this->titleBar = new QWidget();
     this->titleBar->setFixedHeight(100);
-    this->titleBar->setStyleSheet("background-color:transparent;  border: 2px solid white; color: aliceblue");
+    this->titleBar->setStyleSheet("background-color:transparent; border-bottom:2px solid white; color: aliceblue");
     this->titleBarLayout = new QHBoxLayout(titleBar);
     this->titleBarLayout->addWidget(returnButton);
     this->titleBarLayout->addWidget(titleLabel);

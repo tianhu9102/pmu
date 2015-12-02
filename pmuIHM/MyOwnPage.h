@@ -10,6 +10,7 @@
 #include <QScreen>
 #include <QFont>
 #include <QToolButton>
+#include <MyRssCourse.h>
 
 class MyOwnPage : public QWidget
 {
@@ -22,8 +23,9 @@ public:
     void initial();
     void constructIHM();
     void setConnections();
-
 private:
+    MyRssCourse *myRssCourse;
+
     QLabel* idAvatarLabel;
     QLabel* idAccountLabel;
     QLabel* idEmailLabel;
@@ -56,7 +58,7 @@ private:
     QScreen* screen;
 
 private slots:
-   void lks();
+
 
 };
 

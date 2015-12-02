@@ -1,5 +1,8 @@
 #include "ClassificationWidget.h"
 #include <QDebug>
+#include <QtWidgets>
+
+Q_LOGGING_CATEGORY(lcExample, "qt.examples.imagegestures")
 
 ClassificationWidget::ClassificationWidget(QWidget *parent): QWidget(parent){
     this->initial();
@@ -7,6 +10,14 @@ ClassificationWidget::ClassificationWidget(QWidget *parent): QWidget(parent){
     this->setConnections();
     //this->setStyleSheet("background-color:rgb(135,209,199)");
     this->drawBackground();
+}
+
+void ClassificationWidget::grabGestures(const QList<Qt::GestureType> &gestures)
+{
+    //! [enable gestures]
+    foreach (Qt::GestureType gesture, gestures)
+        grabGesture(gesture);
+    //! [enable gestures]
 }
 
 bool ClassificationWidget::event(QEvent *event){
@@ -18,19 +29,83 @@ bool ClassificationWidget::event(QEvent *event){
 bool ClassificationWidget::gestureEvent(QGestureEvent *event){
     if (QGesture *swipe = event->gesture(Qt::SwipeGesture))
             swipeTriggered(static_cast<QSwipeGesture *>(swipe));
-    return true;
+    else if (QGesture *pan = event->gesture(Qt::PanGesture))
+           panTriggered(static_cast<QPanGesture *>(pan));
+       else if (QGesture *tap = event->gesture(Qt::TapGesture))
+           tapTriggered(static_cast<QTapGesture *>(tap));
+       else if (QGesture *tapAndHold = event->gesture(Qt::TapAndHoldGesture))
+           tapAndHoldTriggered(static_cast<QTapAndHoldGesture *>(tapAndHold));
+       if (QGesture *pinch = event->gesture(Qt::PinchGesture))
+           pinchTriggered(static_cast<QPinchGesture *>(pinch));
+       return true;
 }
 
-void ClassificationWidget::swipeTriggered(QSwipeGesture* gesture){
-    if (gesture->state() == Qt::GestureUpdated) {
-            if (gesture->verticalDirection() == QSwipeGesture::Down
-                || gesture->verticalDirection() == QSwipeGesture::Up) {
-                qDebug() << "swipeTriggered(): swipe to previous";
-            } else {
-                qDebug() << "swipeTriggered(): swipe to next";
-            }
+void ClassificationWidget::swipeTriggered(QSwipeGesture *gesture)
+{
+    if (gesture->state() == Qt::GestureFinished) {
+        if (gesture->horizontalDirection() == QSwipeGesture::Down
+            || gesture->verticalDirection() == QSwipeGesture::Up) {
+            contentWidgetScrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+            qDebug()<<"sb";
+            qCDebug(lcExample) << "swipeTriggered(): swipe to previous";
+        } else {
+            qCDebug(lcExample) << "swipeTriggered(): swipe to next";
         }
+    }
 }
+
+void ClassificationWidget::panTriggered(QPanGesture *gesture)
+{
+#ifndef QT_NO_CURSOR
+    switch (gesture->state()) {
+        case Qt::GestureStarted:
+        case Qt::GestureUpdated:
+            setCursor(Qt::SizeAllCursor);
+            break;
+        default:
+            setCursor(Qt::ArrowCursor);
+    }
+#endif
+    QPointF delta = gesture->delta();
+    qCDebug(lcExample) << "panTriggered():" << delta;
+    horizontalOffset += delta.x();
+    verticalOffset += delta.y();
+}
+
+void ClassificationWidget::pinchTriggered(QPinchGesture *gesture)
+{
+    QPinchGesture::ChangeFlags changeFlags = gesture->changeFlags();
+    if (changeFlags & QPinchGesture::RotationAngleChanged) {
+        const qreal value = gesture->property("rotationAngle").toReal();
+        const qreal lastValue = gesture->property("lastRotationAngle").toReal();
+        const qreal rotationAngleDelta = value - lastValue;
+        rotationAngle += rotationAngleDelta;
+        qCDebug(lcExample) << "pinchTriggered(): rotation by" << rotationAngleDelta << rotationAngle;
+    }
+    if (changeFlags & QPinchGesture::ScaleFactorChanged) {
+        qreal value = gesture->property("scaleFactor").toReal();
+        currentStepScaleFactor = value;
+        qCDebug(lcExample) << "pinchTriggered(): " << currentStepScaleFactor;
+    }
+    if (gesture->state() == Qt::GestureFinished) {
+        scaleFactor *= currentStepScaleFactor;
+        currentStepScaleFactor = 1;
+    }
+    update();
+}
+
+
+void ClassificationWidget::tapTriggered(QTapGesture *gesture)
+{
+    qCDebug(lcExample) << "tapTriggered():" ;
+}
+
+void ClassificationWidget::tapAndHoldTriggered(QTapAndHoldGesture *gesture)
+{
+    qCDebug(lcExample) << "tapAndHoldTriggered():";
+}
+
+
 
 ClassificationWidget::~ClassificationWidget(){
 
@@ -71,7 +146,14 @@ void ClassificationWidget::initial(){
     this->buttonWidth = 0.5 * 0.7 * width;
     this->searchPage = new SearchWidget();
     qDebug()<<"height = "<<this->height<<"width = "<<this->width;
-    this->grabGesture(Qt::SwipeGesture);
+
+    QList<Qt::GestureType> gestures;
+    gestures << Qt::PanGesture;
+    gestures << Qt::PinchGesture;
+    gestures << Qt::SwipeGesture;
+    gestures << Qt::TapGesture;
+    gestures << Qt::TapAndHoldGesture;
+    this->grabGestures(gestures);
 }
 
 //!----------------------------------------------------------------------------------------------------
@@ -115,286 +197,6 @@ void ClassificationWidget::constructIHM(){
     this->fourthWidget = new TemplateWidget(width, height);
     this->fifthWidget = new TemplateWidget(width, height);
     this->sixthWidget = new TemplateWidget(width, height);
-    //chineseLabel = new QLabel("中文");
-//    chineseLabel->setFont(QFont("Segoe UI" , 40, QFont::Normal, false));
-//    chineseLabel->setAlignment(Qt::AlignCenter);
-//    chineseLabel->setStyleSheet("background-color:aliceBlue;border: 0px;");
-//    chineseLabel->setFixedWidth(0.3 * width);
-
-//    chineseGridButtonone = new QPushButton("杜月1");
-//    chineseGridButtonone->setStyleSheet("background-color:aliceBlue;border: 0px;");
-//    chineseGridButtonone->setFont(*caracterStyle);
-//    chineseGridButtonone->setFixedSize(buttonWidth,buttonHeight);
-//    chineseGridButtontwo = new QPushButton("杜月2");
-//    chineseGridButtontwo->setStyleSheet("background-color:aliceBlue;border: 0px;");
-//    chineseGridButtontwo->setFont(*caracterStyle);
-//    chineseGridButtontwo->setFixedSize(buttonWidth,buttonHeight);
-//    chineseGridButtonthree = new QPushButton("杜月3");
-//    chineseGridButtonthree->setStyleSheet("background-color:aliceBlue;border: 0px;");
-//    chineseGridButtonthree->setFont(*caracterStyle);
-//    chineseGridButtonthree->setFixedSize(buttonWidth,buttonHeight);
-//    chineseGridButtonfour = new QPushButton("更多");
-//    chineseGridButtonfour->setStyleSheet("background-color:aliceBlue;border: 0px;");
-//    chineseGridButtonfour->setFont(*caracterStyle);
-//    chineseGridButtonfour->setFixedSize(buttonWidth,buttonHeight);
-
-//    contentInfoChWidget = new QWidget();
-//    contentInfoChWidget->setFixedWidth(0.7 * width);
-//    contentInfoChWidget->setStyleSheet("background-color:transparent;border: 0px;");
-
-//    chineseGridLayout = new QGridLayout(contentInfoChWidget);
-//    chineseGridLayout->addWidget(chineseGridButtonone,0,0,1,1);
-//    chineseGridLayout->addWidget(chineseGridButtontwo,0,1,1,1);
-//    chineseGridLayout->addWidget(chineseGridButtonthree,1,0,1,1);
-//    chineseGridLayout->addWidget(chineseGridButtonfour,1,1,1,1);
-//    chineseGridLayout->setHorizontalSpacing(width *0.02);
-//    chineseGridLayout->setVerticalSpacing(height*0.012);
-//    chineseGridLayout->setMargin(0);
-
-//    contentChineseWidget = new QWidget();
-//    contentChineseWidget->setFixedSize(width,0.24 * 0.8 *height);
-//    contentChineseWidget->setStyleSheet("background-color:transparent");
-//    chineseWidgetLayout = new QHBoxLayout(contentChineseWidget);
-//    chineseWidgetLayout->addStretch(0);
-    //chineseWidgetLayout->addWidget(chineseLabel);
-//    chineseWidgetLayout->addWidget(contentInfoChWidget);
-//    chineseWidgetLayout->addStretch(0);
-//    chineseWidgetLayout->setAlignment(Qt::AlignCenter);
-//    chineseWidgetLayout->setSpacing(width *0.01);
-//    chineseWidgetLayout->setMargin(0);
-
-    //!second window english
-//    englishLabel = new QLabel("英語");
-//    englishLabel->setFont(QFont("Segoe UI" , 40, QFont::Normal, false));
-//    englishLabel->setAlignment(Qt::AlignCenter);
-//    englishLabel->setStyleSheet("background-color:aliceBlue;border: 0px;");
-//    englishLabel->setFixedWidth(0.3 * width);
-
-//    englishGridButtonone = new QPushButton("杜月1");
-//    englishGridButtonone->setStyleSheet("background-color:aliceBlue;border: 0px;");
-//    englishGridButtonone->setFont(*caracterStyle);
-//    englishGridButtonone->setFixedSize(buttonWidth,buttonHeight);
-//    englishGridButtontwo = new QPushButton("杜月2");
-//    englishGridButtontwo->setStyleSheet("background-color:aliceBlue;border: 0px;");
-//    englishGridButtontwo->setFont(*caracterStyle);
-//    englishGridButtontwo->setFixedSize(buttonWidth,buttonHeight);
-//    englishGridButtonthree = new QPushButton("杜月3");
-//    englishGridButtonthree->setStyleSheet("background-color:aliceBlue;border: 0px;");
-//    englishGridButtonthree->setFont(*caracterStyle);
-//    englishGridButtonthree->setFixedSize(buttonWidth,buttonHeight);
-//    englishGridButtonfour = new QPushButton("更多");
-//    englishGridButtonfour->setStyleSheet("background-color:aliceBlue;border: 0px;");
-//    englishGridButtonfour->setFont(*caracterStyle);
-//    englishGridButtonfour->setFixedSize(buttonWidth,buttonHeight);
-
-//    contentInfoEnWidget = new QWidget();
-//    contentInfoEnWidget->setFixedWidth(0.7 * width);
-//    contentInfoEnWidget->setStyleSheet("background-color:transparent;");
-
-//    englishGridLayout = new QGridLayout(contentInfoEnWidget);
-//    englishGridLayout->addWidget(englishGridButtonone,0,0,1,1);
-//    englishGridLayout->addWidget(englishGridButtontwo,0,1,1,1);
-//    englishGridLayout->addWidget(englishGridButtonthree,1,0,1,1);
-//    englishGridLayout->addWidget(englishGridButtonfour,1,1,1,1);
-//    englishGridLayout->setHorizontalSpacing(width *0.02);
-//    englishGridLayout->setVerticalSpacing(height*0.012);
-//    englishGridLayout->setMargin(0);
-
-//    contentEnglishWidget = new QWidget();
-//    contentEnglishWidget->setFixedHeight(0.24 * 0.8 * height);
-//    contentEnglishWidget->setStyleSheet("background-color:transparent");
-
-//    englishWidgetLayout = new QHBoxLayout(contentEnglishWidget);
-//    englishWidgetLayout->addWidget(englishLabel);
-//    englishWidgetLayout->addWidget(contentInfoEnWidget);
-//    englishWidgetLayout->setSpacing(width *0.01);
-//    englishWidgetLayout->setMargin(0);
-
-//    //!thrid french window
-//    frenchLabel = new QLabel("法語");
-//    frenchLabel->setFont(QFont("Segoe UI" , 40, QFont::Normal, false));
-//    frenchLabel->setAlignment(Qt::AlignCenter);
-//    frenchLabel->setStyleSheet("background-color:aliceBlue;border: 0px;");
-//    frenchLabel->setFixedWidth(0.3 * width);
-
-//    frenchGridButtonone = new QPushButton("杜月1");
-//    frenchGridButtonone->setStyleSheet("background-color:aliceBlue;border: 0px;");
-//    frenchGridButtonone->setFont(*caracterStyle);
-//    frenchGridButtonone->setFixedSize(buttonWidth,buttonHeight);
-//    frenchGridButtontwo = new QPushButton("杜月2");
-//    frenchGridButtontwo->setStyleSheet("background-color:aliceBlue;border: 0px;");
-//    frenchGridButtontwo->setFont(*caracterStyle);
-//    frenchGridButtontwo->setFixedSize(buttonWidth,buttonHeight);
-//    frenchGridButtonthree = new QPushButton("杜月3");
-//    frenchGridButtonthree->setStyleSheet("background-color:aliceBlue;border: 0px;");
-//    frenchGridButtonthree->setFont(*caracterStyle);
-//    frenchGridButtonthree->setFixedSize(buttonWidth,buttonHeight);
-//    frenchGridButtonfour = new QPushButton("更多");
-//    frenchGridButtonfour->setStyleSheet("background-color:aliceBlue;border: 0px;");
-//    frenchGridButtonfour->setFont(*caracterStyle);
-//    frenchGridButtonfour->setFixedSize(buttonWidth,buttonHeight);
-
-//    contentInfoFrWidget = new QWidget();
-//    contentInfoFrWidget->setFixedWidth(0.7 * width);
-//    contentInfoFrWidget->setStyleSheet("background-color:transparent;");
-
-//    frenchGridLayout = new QGridLayout(contentInfoFrWidget);
-//    frenchGridLayout->addWidget(frenchGridButtonone,0,0,1,1);
-//    frenchGridLayout->addWidget(frenchGridButtontwo,0,1,1,1);
-//    frenchGridLayout->addWidget(frenchGridButtonthree,1,0,1,1);
-//    frenchGridLayout->addWidget(frenchGridButtonfour,1,1,1,1);
-//    frenchGridLayout->setHorizontalSpacing(width *0.02);
-//    frenchGridLayout->setVerticalSpacing(height*0.012);
-//    frenchGridLayout->setMargin(0);
-
-//    contentFrenchWidget = new QWidget();
-//    contentFrenchWidget->setFixedHeight(0.24 * 0.8 * height);
-//    contentFrenchWidget->setStyleSheet("background-color:transparent");
-
-//    frenchWidgetLayout = new QHBoxLayout(contentFrenchWidget);
-//    frenchWidgetLayout->addWidget(frenchLabel);
-//    frenchWidgetLayout->addWidget(contentInfoFrWidget);
-//    frenchWidgetLayout->setSpacing(width *0.01);
-//    frenchWidgetLayout->setMargin(0);
-
-
-//    //!forth deutsch window
-//    deutchLabel = new QLabel("德語");
-//    deutchLabel->setFont(QFont("Segoe UI" , 40, QFont::Normal, false));
-//    deutchLabel->setAlignment(Qt::AlignCenter);
-//    deutchLabel->setStyleSheet("background-color:aliceBlue;border: 0px;");
-//    deutchLabel->setFixedWidth(0.3 * width);
-
-//    deutschGridButtonone = new QPushButton("杜月1");
-//    deutschGridButtonone->setStyleSheet("background-color:aliceBlue;border: 0px;");
-//    deutschGridButtonone->setFont(*caracterStyle);
-//    deutschGridButtonone->setFixedSize(buttonWidth,buttonHeight);
-//    deutschGridButtontwo = new QPushButton("杜月2");
-//    deutschGridButtontwo->setStyleSheet("background-color:aliceBlue;border: 0px;");
-//    deutschGridButtontwo->setFont(*caracterStyle);
-//    deutschGridButtontwo->setFixedSize(buttonWidth,buttonHeight);
-//    deutschGridButtonthree = new QPushButton("杜月3");
-//    deutschGridButtonthree->setStyleSheet("background-color:aliceBlue;border: 0px;");
-//    deutschGridButtonthree->setFont(*caracterStyle);
-//    deutschGridButtonthree->setFixedSize(buttonWidth,buttonHeight);
-//    deutschGridButtonfour = new QPushButton("更多");
-//    deutschGridButtonfour->setStyleSheet("background-color:aliceBlue;border: 0px;");
-//    deutschGridButtonfour->setFont(*caracterStyle);
-//    deutschGridButtonfour->setFixedSize(buttonWidth,buttonHeight);
-
-//    contentInfoGeWidget = new QWidget();
-//    contentInfoGeWidget->setFixedWidth(0.7 * width);
-//    contentInfoGeWidget->setStyleSheet("background-color:transparent;");
-
-//    deutschGridLayout = new QGridLayout(contentInfoGeWidget);
-//    deutschGridLayout->addWidget(deutschGridButtonone,0,0,1,1);
-//    deutschGridLayout->addWidget(deutschGridButtontwo,0,1,1,1);
-//    deutschGridLayout->addWidget(deutschGridButtonthree,1,0,1,1);
-//    deutschGridLayout->addWidget(deutschGridButtonfour,1,1,1,1);
-//    deutschGridLayout->setHorizontalSpacing(width *0.02);
-//    deutschGridLayout->setVerticalSpacing(height*0.012);
-//    deutschGridLayout->setMargin(0);
-
-//    contentDeutschWidget = new QWidget();
-//    contentDeutschWidget->setFixedHeight(0.24 * 0.8 * height);
-//    contentDeutschWidget->setStyleSheet("background-color:transparent");
-
-//    deutschWidgetLayout = new QHBoxLayout(contentDeutschWidget);
-//    deutschWidgetLayout->addWidget(deutchLabel);
-//    deutschWidgetLayout->addWidget(contentInfoGeWidget);
-//    deutschWidgetLayout->setSpacing(width *0.01);
-//    deutschWidgetLayout->setMargin(0);
-//    //!
-
-//    japaneseLabel = new QLabel("日語");
-//    japaneseLabel->setFont(QFont("Segoe UI" , 40, QFont::Normal, false));
-//    japaneseLabel->setAlignment(Qt::AlignCenter);
-//    japaneseLabel->setStyleSheet("background-color:aliceBlue;border: 0px;");
-//    japaneseLabel->setFixedWidth(0.3 * width);
-
-//    japaneseGridButtonone = new QPushButton("杜月1");
-//    japaneseGridButtonone->setStyleSheet("background-color:aliceBlue;border: 0px;");
-//    japaneseGridButtonone->setFont(*caracterStyle);
-//    japaneseGridButtonone->setFixedSize(buttonWidth,buttonHeight);
-//    japaneseGridButtontwo = new QPushButton("杜月2");
-//    japaneseGridButtontwo->setStyleSheet("background-color:aliceBlue;border: 0px;");
-//    japaneseGridButtontwo->setFont(*caracterStyle);
-//    japaneseGridButtontwo->setFixedSize(buttonWidth,buttonHeight);
-//    japaneseGridButtonthree = new QPushButton("杜月3");
-//    japaneseGridButtonthree->setStyleSheet("background-color:aliceBlue;border: 0px;");
-//    japaneseGridButtonthree->setFont(*caracterStyle);
-//    japaneseGridButtonthree->setFixedSize(buttonWidth,buttonHeight);
-//    japaneseGridButtonfour = new QPushButton("更多");
-//    japaneseGridButtonfour->setStyleSheet("background-color:aliceBlue;border: 0px;");
-//    japaneseGridButtonfour->setFont(*caracterStyle);
-//    japaneseGridButtonfour->setFixedSize(buttonWidth,buttonHeight);
-
-
-//    contentInfoJaWidget = new QWidget();
-//    contentInfoJaWidget->setFixedWidth(0.7 * width);
-//    contentInfoJaWidget->setStyleSheet("background-color:transparent;");
-
-//    japaneseGridLayout = new QGridLayout(contentInfoJaWidget);
-//    japaneseGridLayout->addWidget(japaneseGridButtonone,0,0,1,1);
-//    japaneseGridLayout->addWidget(japaneseGridButtontwo,0,1,1,1);
-//    japaneseGridLayout->addWidget(japaneseGridButtonthree,1,0,1,1);
-//    japaneseGridLayout->addWidget(japaneseGridButtonfour,1,1,1,1);
-//    japaneseGridLayout->setHorizontalSpacing(width *0.02);
-//    japaneseGridLayout->setVerticalSpacing(height*0.012);
-//    japaneseGridLayout->setMargin(0);
-
-//    contentJapaneseWidget = new QWidget();
-//    contentJapaneseWidget->setFixedHeight(0.24 * 0.8 * height);
-//    japaneseWidgetLayout = new QHBoxLayout(contentJapaneseWidget);
-//    japaneseWidgetLayout->addWidget(japaneseLabel);
-//    japaneseWidgetLayout->addWidget(contentInfoJaWidget);
-//    japaneseWidgetLayout->setSpacing(width *0.01);
-//    japaneseWidgetLayout->setMargin(0);
-
-//    koreanLabel = new QLabel("韓語");
-//    koreanLabel->setFont(QFont("Segoe UI" , 40, QFont::Normal, false));
-//    koreanLabel->setAlignment(Qt::AlignCenter);
-//    koreanLabel->setStyleSheet("background-color:aliceBlue;border: 0px;");
-//    koreanLabel->setFixedWidth(0.3 * width);
-
-//    koreanGridButtonone = new QPushButton("杜月1");
-//    koreanGridButtonone->setStyleSheet("background-color:aliceBlue;border: 0px;");
-//    koreanGridButtonone->setFont(*caracterStyle);
-//    koreanGridButtonone->setFixedSize(buttonWidth,buttonHeight);
-//    koreanGridButtontwo = new QPushButton("杜月2");
-//    koreanGridButtontwo->setStyleSheet("background-color:aliceBlue;border: 0px;");
-//    koreanGridButtontwo->setFont(*caracterStyle);
-//    koreanGridButtontwo->setFixedSize(buttonWidth,buttonHeight);
-//    koreanGridButtonthree = new QPushButton("杜月3");
-//    koreanGridButtonthree->setStyleSheet("background-color:aliceBlue;border: 0px;");
-//    koreanGridButtonthree->setFont(*caracterStyle);
-//    koreanGridButtonthree->setFixedSize(buttonWidth,buttonHeight);
-//    koreanGridButtonfour = new QPushButton("更多");
-//    koreanGridButtonfour->setStyleSheet("background-color:aliceBlue;border: 0px;");
-//    koreanGridButtonfour->setFont(*caracterStyle);
-//    koreanGridButtonfour->setFixedSize(buttonWidth,buttonHeight);
-
-
-//    contentInfoKoWidget = new QWidget();
-//    contentInfoKoWidget->setFixedWidth(0.7 * width);
-//    contentInfoKoWidget->setStyleSheet("background-color:transparent;");
-
-//    koreanGridLayout = new QGridLayout(contentInfoKoWidget);
-//    koreanGridLayout->addWidget(koreanGridButtonone,0,0,1,1);
-//    koreanGridLayout->addWidget(koreanGridButtontwo,0,1,1,1);
-//    koreanGridLayout->addWidget(koreanGridButtonthree,1,0,1,1);
-//    koreanGridLayout->addWidget(koreanGridButtonfour,1,1,1,1);
-//    koreanGridLayout->setHorizontalSpacing(width *0.02);
-//    koreanGridLayout->setVerticalSpacing(height*0.012);
-//    koreanGridLayout->setMargin(0);
-
-//    contentKoreanWidget = new QWidget();
-//    contentKoreanWidget->setFixedHeight(0.24 * 0.8 * height);
-//    koreanWidgetLayout = new QHBoxLayout(contentKoreanWidget);
-//    koreanWidgetLayout->addWidget(koreanLabel);
-//    koreanWidgetLayout->addWidget(contentInfoKoWidget);
-//    koreanWidgetLayout->setSpacing(width *0.01);
-//    koreanWidgetLayout->setMargin(0);
 
     //!create content bar area
     contentWidget = new QWidget();
@@ -408,20 +210,11 @@ void ClassificationWidget::constructIHM(){
     mainLayout->addWidget(sixthWidget);
     mainLayout->setMargin(0);
     mainLayout->setSpacing(0);
-    //!--------------------
-//    contentWidgetLayout = new QVBoxLayout(contentWidget);
-//    contentWidgetLayout->addWidget(contentChineseWidget);
-//    contentWidgetLayout->addWidget(contentEnglishWidget);
-//    contentWidgetLayout->addWidget(contentFrenchWidget);
-//    contentWidgetLayout->addWidget(contentDeutschWidget);
-//    contentWidgetLayout->addWidget(contentJapaneseWidget);
-//    contentWidgetLayout->addWidget(contentKoreanWidget);
-//    contentWidgetLayout->setSpacing(5);
-//    contentWidgetLayout->setMargin(0);
 
     contentWidgetScrollArea = new QScrollArea();
+//    contentWidgetScrollArea->setFixedHeight(0.8*height);
     contentWidgetScrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    contentWidgetScrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+    contentWidgetScrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     contentWidgetScrollArea->setStyleSheet("QScrollBar:vertical {border: 0px; background: transparent; width: 20px;}"
                                            "QScrollBar::handle:vertical {background: #8080FF; border-radius:10px;min-height: 10px;}"
                                            "QScrollBar::add-line:vertical {height: 0px;subcontrol-position: bottom;}"
@@ -429,6 +222,8 @@ void ClassificationWidget::constructIHM(){
                                            "QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {background: transparent;}"
                                            );
     contentWidgetScrollArea->viewport()->setBackgroundRole(QPalette::Light);
+    contentWidgetScrollArea->setWidgetResizable(false);
+
     //contentWidgetScrollArea->setBackgroundRole(QPalette::Dark);
     contentWidgetScrollArea->setWidget(contentWidget);
     
@@ -477,10 +272,4 @@ void ClassificationWidget::signSearchPage(){
 }
 
 //!----------------------------------------------------------------------------------------------------
-//!
-//! \brief LanguageWidget::adjustScrollBar
-//! \param scrollBar
-//!
-void ClassificationWidget::adjustScrollBar(QScrollBar *scrollBar){
-    scrollBar->setValue(int(0.1 * scrollBar->value() + + ((0.8 - 1) * scrollBar->pageStep()/2)));
-}
+

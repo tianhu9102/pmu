@@ -45,7 +45,8 @@ void RegAndSignPage::constructIHM(){
     returnButton->setIcon(QIcon(":/images/return.png"));
     returnButton->setIconSize(QSize(0.15*width,0.05*height));
     returnButton->setFixedWidth(0.15*width);
-    returnButton->setStyleSheet("border: 0px;background-color:transparent; color: AliceBlue");
+    returnButton->setStyleSheet("QPushButton{border: 0px;background-color:transparent; color: AliceBlue}"
+                                "QPushButton:focus{padding: -2;}");
 
     mainWidgetName = new QLabel();
     mainWidgetName = new QLabel("用郵箱登陸");
@@ -54,7 +55,8 @@ void RegAndSignPage::constructIHM(){
 
     moreInformationButton = new QPushButton("┇");
     moreInformationButton->setFixedWidth(0.15*width);
-    moreInformationButton->setStyleSheet("border: 0px;background-color:transparent; color: AliceBlue");
+    moreInformationButton->setStyleSheet("QPushButton{border: 0px;background-color:transparent; color: AliceBlue}"
+                                         "QPushButton:focus{padding: -2;}");
 
     titleBar = new QWidget();
     titleBar->setFixedHeight(0.1*height);
@@ -68,13 +70,15 @@ void RegAndSignPage::constructIHM(){
 
     forgetButton = new QPushButton("忘記密碼？");
     forgetButton->setFixedWidth(0.25*width);
-    forgetButton->setStyleSheet("border: 0px;background-color:transparent; color: AliceBlue");
+    forgetButton->setStyleSheet("QPushButton{border: 0px;background-color:transparent; color: AliceBlue}"
+                                "QPushButton:focus{padding: -2;}");
 
     switchStatusWindowRest = new QWidget();
 
     registrationButton =new QPushButton("註冊");
     registrationButton->setFixedWidth(0.1*width);
-    registrationButton->setStyleSheet("border: 0px;background-color:transparent; color: AliceBlue");
+    registrationButton->setStyleSheet("QPushButton{border: 0px;background-color:transparent; color: AliceBlue}"
+                                      "QPushButton:focus{padding: -2;}");
 
     switchStatusWindow = new QWidget();
 
@@ -130,7 +134,8 @@ void RegAndSignPage::constructIHM(){
 
     loginButton = new QPushButton("登  陸");
     loginButton->setFont(*this->caracterStyle);
-    loginButton->setStyleSheet("border: 1px; background-color:rgb(63,188,255);color: AliceBlue");
+    loginButton->setStyleSheet("QPushButton{border: 1px; background-color:rgb(63,188,255);color: AliceBlue}"
+                               "QPushButton:focus{padding:-2}");
     loginButton->setFixedHeight(0.071*height);
 
 

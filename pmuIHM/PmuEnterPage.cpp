@@ -87,6 +87,7 @@ void PmuEnterPage::constructIHM(){
     //centerplantform layout
     //--------------------------------------------------------------------------------------
     this->welcomLabel = new QLabel("學  滴  野");
+   // this->welcomLabel->setFixedHeight(height * 0.2);
     this->welcomLabel->setFont(QFont("华文行楷", 50, QFont::Bold, false));
     this->welcomLabel->setStyleSheet("background-color:transparent; color: aliceblue");
     this->welcomLabel->setAlignment(Qt::AlignCenter);
@@ -98,11 +99,11 @@ void PmuEnterPage::constructIHM(){
                                            "QLineEdit:focus{border-style:outset; border-width:0px; border-radius: 0px; border-color: rgb(41, 237, 215); color:rgb(0, 0, 0); background-color: azure; } ");
 
     this->searchingButton = new QPushButton();
-    //this->searchingButton->setIcon(QIcon(":/images/searchButton.png"));
     this->searchingButton->setFixedSize(width*0.092,height*0.053);
     this->searchingButton->setIconSize(QSize(width*0.092,height*0.053));
     this->searchingButton->setStyleSheet("QPushButton{border-image: url(:/images/searchButton.png); background-color:AliceBlue;border: 0px;}"
-                                   "QPushButton:pressed{border-image: url(:/images/searchButton1.png);background-color:AliceBlue;border: 0px;}");
+                                         "QPushButton:pressed{border-image: url(:/images/searchButton1.png);background-color:AliceBlue;border: 0px;}"
+                                         "QPushButton:focus{padding: -2;}");
 
     this->optionCombox = new QComboBox();
     this->optionCombox->setFixedSize(width*0.18, height*0.053);
@@ -127,10 +128,12 @@ void PmuEnterPage::constructIHM(){
     this->searchingBarLayout->setMargin(0);
 
     this->enterHomePageButton = new QPushButton("進入主頁");
-    this->enterHomePageButton->setStyleSheet("background-color:transparent; color: aliceblue; border: 1px solid white; border-radius:16px");
+    this->enterHomePageButton->setStyleSheet("QPushButton{background-color:transparent; color: aliceblue; border: 1px solid white; border-radius:16px}"
+                                             "QPushButton:focus{padding: -3;}");
     this->enterHomePageButton->setFixedSize(width*0.28,height*0.053);
 
     this->enterHomePageWidget =new QWidget();
+    //this->enterHomePageWidget->setFixedHeight(height*0.5);
     this->enterHomePageWidget->setStyleSheet("background-color:transparent;");
     this->enterHomePageWidgetLayout = new QHBoxLayout(this->enterHomePageWidget);
     this->enterHomePageWidgetLayout->addWidget(this->enterHomePageButton);
@@ -140,7 +143,9 @@ void PmuEnterPage::constructIHM(){
     this->centerPlantform->setFixedSize(width*0.74, height*0.53);
     this->centerPlantformLayout = new QVBoxLayout(centerPlantform);
     this->centerPlantformLayout->addWidget(this->welcomLabel);
+//    this->centerPlantformLayout->addStretch();
     this->centerPlantformLayout->addWidget(this->searchingBar);
+//    this->centerPlantformLayout->addStretch();
     this->centerPlantformLayout->addWidget(this->enterHomePageWidget);
     this->centerPlantformLayout->setSpacing(0);
     this->centerPlantformLayout->setMargin(0);
@@ -214,7 +219,8 @@ void PmuEnterPage::creatDialogWidget(){
     this->individualButton = new QPushButton("個  人");
     this->individualButton->setFixedSize(width*0.75*0.5,height*0.35*0.4);
     this->individualButton->setFont(QFont("Segoe UI", 25, QFont::AnyStyle, false));
-    this->individualButton->setStyleSheet("background-color:transparent; color:skyBlue; border: 0px solid Gray;border-radius: 0px;padding: 08px;");
+    this->individualButton->setStyleSheet("QPushButton{background-color:transparent; color:skyBlue; border: 0px solid Gray;border-radius: 0px;padding: 08px;}"
+                                          "QPushButton:focus{padding:-2}");
 
 //    this->orLabel = new QLabel("OR");
 //    this->orLabel->setFont(QFont("Segoe UI", 25, QFont::AnyStyle, false));
@@ -222,7 +228,8 @@ void PmuEnterPage::creatDialogWidget(){
     this->organizationButton = new QPushButton("機  構");
     this->organizationButton->setFixedSize(width*0.75*0.5,height*0.35*0.4);
     this->organizationButton->setFont(QFont("Segoe UI", 25, QFont::AnyStyle, false));
-    this->organizationButton->setStyleSheet("background-color:transparent; color:skyBlue; border: 0px solid Gray;border-radius: 0px;padding: 08px;");
+    this->organizationButton->setStyleSheet("QPushButton{background-color:transparent; color:skyBlue; border: 0px solid Gray;border-radius: 0px;padding: 08px;}"
+                                            "QPushButton:focus{padding:-2}");
 
     this->optionWidget = new QWidget();
     this->optionWidget->setFixedHeight(height*0.35*0.4);

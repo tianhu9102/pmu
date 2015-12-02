@@ -52,7 +52,8 @@ private:
     QHBoxLayout *searchingBarLayout;
     QLineEdit *searchingLineEdit;
 
-    QPushButton *searchingButton;
+    //QPushButton* returnBackButton;
+    QPushButton* searchingButton;
     QPushButton* somethingElseButton1;
 
     QListView* optionListWidget;
