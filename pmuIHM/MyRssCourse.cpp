@@ -22,7 +22,7 @@ void MyRssCourse::constructIHM(){
     this->returnButton->setStyleSheet("QPushButton{border: 0px;background-color:transparent; color: AliceBlue; Alignment:AlignCenter}"
                                       "QPushButton:focus{padding: -2;}");
 
-    this->titleBarLabel = new QLabel("我订阅的课程");
+    this->titleBarLabel = new QLabel("我訂閱的課程");
     this->titleBarLabel->setFont(QFont("Segoe UI",18,QFont::Normal,false));
     this->titleBarLabel->setAlignment(Qt::AlignVCenter);
     this->titleBarLabel->setStyleSheet("border: 0px ;border-radius: 0px;padding: 22px;background-color: transparent; color: AliceBlue");
@@ -46,6 +46,10 @@ void MyRssCourse::constructIHM(){
     this->myRssCoursePageLayout->setSpacing(0);
 }
 
+//!-----------------------------------------------------------------------------------------
+//!
+//! \brief MyRssCourse::setConnections
+//!
 void MyRssCourse::setConnections(){
     this->connect(this->returnButton, SIGNAL(clicked()), this, SLOT(close()));
 }

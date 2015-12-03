@@ -23,6 +23,7 @@ void PmuEnterPage::initVariable(){
     this->height = screen->availableSize().height();
     this->width = screen->availableSize().width();
     this->caracterStyle = new QFont("Segoe UI", 17, QFont::AnyStyle, false);
+
     this->regAndSignPage = new RegAndSignPage(width, height, flag, this->connectToServer);
     this->pmuHomeTabPage = new PmuHomeTabPage(width, height, caracterStyle);
     //this->regAndSignPage = new RegAndSignPage(width, height, flag);

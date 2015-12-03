@@ -23,8 +23,8 @@
 #include "CoursePublishPage.h"
 #include "ConnectToServer.h"
 
-class PmuEnterPage : public QWidget
-{
+
+class PmuEnterPage : public QWidget{
     Q_OBJECT
 
 public:

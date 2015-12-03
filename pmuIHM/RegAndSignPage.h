@@ -85,10 +85,7 @@ private:
 
 public slots:
     void showSignUpInformation();
-
     void sign();
-    void reponse(QNetworkReply*reply);
-
 };
 
 

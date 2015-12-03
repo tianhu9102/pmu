@@ -2,7 +2,6 @@
 #define PMUMAINPAGE_H
 
 #include <QWidget>
-#include <QWidget>
 #include <QPixmap>
 #include <QScreen>
 #include <QPalette>

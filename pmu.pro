@@ -29,7 +29,11 @@ SOURCES += main.cpp\
     pmuIHM/TemplateWidget.cpp \
     AndroidGestureEvent.cpp \
     pmuIHM/ClassificationWidget.cpp \
-    pmuIHM/MyRssCourse.cpp
+    pmuIHM/MyRssCourse.cpp \
+    pmuIHM/MySchedulePage.cpp \
+    ReponseDecodage.cpp \
+    ReponseReceiver.cpp \
+    CurrentAction.cpp
 
 HEADERS  += \
     pmuIHM/GuessULikeWidget.h \
@@ -47,7 +51,11 @@ HEADERS  += \
     pmuIHM/TemplateWidget.h \
     AndroidGestureEvent.h \
     pmuIHM/ClassificationWidget.h \
-    pmuIHM/MyRssCourse.h
+    pmuIHM/MyRssCourse.h \
+    pmuIHM/MySchedulePage.h \
+    ReponseDecodage.h \
+    ReponseReceiver.h \
+    CurrentAction.h
 
 RESOURCES += \
     imageresources.qrc
