@@ -19,6 +19,7 @@ void MyOwnPage::initial(){
     characterStyle = new QFont("Segoe UI" , 18, QFont::Normal, false);
     toolButtonStyle = "QToolButton{padding-top:" + QString::number(height*0.02) + ";padding-bottom:" + QString::number(height*0.02) + ";border:none;color:rgb(135,209,199);background-color:transparent;}";
     this->myRssCourse = new MyRssCourse(width, height);
+    this->mySchedulePage = new MySchedulePage(width, height);
 }
 
 //!-----------------------------------------------------------------------------------------
@@ -135,6 +136,7 @@ void MyOwnPage::constructIHM(){
 //!
 void MyOwnPage::setConnections(){
     connect(this->sButton, SIGNAL(clicked()), this->myRssCourse, SLOT(show()));
+    connect(this->tButton, SIGNAL(clicked()), this->mySchedulePage, SLOT(show()));
 }
 
 //!-----------------------------------------------------------------------------------------

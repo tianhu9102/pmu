@@ -16,7 +16,6 @@ RegAndSignPage::RegAndSignPage(int width, int height, bool flag, ConnectToServer
     this->checkStates();
     this->setConnections();
     this->drawBackground();
-    //this->setStyleSheet("background-color:rgb(135,209,199)");
 }
 
 //!-----------------------------------------------------------------------------------------
@@ -166,28 +165,20 @@ void RegAndSignPage::setConnections(){
     this->connect(loginButton, SIGNAL(clicked()), this, SLOT(sign()));
 }
 
+//!-----------------------------------------------------------------------------------------
+//!
+//! \brief RegAndSignPage::sign
+//!
 void RegAndSignPage::sign(){
 
     if(!flag){
-        qDebug()<<"-------";
-        QNetworkAccessManager *network_manager = new QNetworkAccessManager();
-        QNetworkRequest network_request;
-        QByteArray post_data;
+        connectToServer->composeRequestMessage("registerForm.email=" + emailAddressLineEdit->text());
+        connectToServer->composeRequestMessage("registerForm.password="+passwordLineEdit->text());
+        connectToServer->composeRequestMessage("registerForm.conformPassword="+confirmPasswordLineEdit->text());
+        connectToServer->composeRequestMessage("registerForm.telephone="+phoneNumberLineEdit->text());
+        connectToServer->composeRequestFinalMessage("registerForm.address="+addressLineEdit->text());
+        connectToServer->connectera("register.action");
 
-        post_data.append("registerForm.email=" + emailAddressLineEdit->text()+ "&");
-        post_data.append("registerForm.password="+passwordLineEdit->text()+"&");
-        post_data.append("registerForm.conformPassword="+confirmPasswordLineEdit->text()+"&");
-        post_data.append("registerForm.telephone="+phoneNumberLineEdit->text()+"&");
-        post_data.append("registerForm.address="+addressLineEdit->text());
-
-
-        network_request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
-        network_request.setHeader(QNetworkRequest::ContentLengthHeader, post_data.length());
-        network_request.setUrl(QUrl("http://172.20.35.211:8090/daishangwo/register.action"));
-
-        connect(network_manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(reponse(QNetworkReply*)));
-
-        network_manager->post(network_request, post_data);
     }
     else{
         qDebug()<<"++++++++-";
@@ -196,9 +187,6 @@ void RegAndSignPage::sign(){
     }
 }
 
-void RegAndSignPage::reponse(QNetworkReply*reply){
-    qDebug()<<"repondu";//<<reply->readAll();
-}
 
 //!-----------------------------------------------------------------------------------------
 //!
